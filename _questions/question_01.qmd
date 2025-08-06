@@ -72,20 +72,30 @@ Teaching Note
 🎯 **Learning Objective** 
 Students should:
 
-- XXXXX
+- Learn how to create a bar plot using ggplot2 to display frequency of a categorical variable
+- Apply basic plot customizations using `labs()`
+- Begin interpreting data distributions and considering real-world implications
+
 
 ✅   **Core Concepts to Highlight**
 
-List them here
+- Bar plots show frequency counts of categorical variables
+- `geom_bar()` uses the count of rows in each category by default
+- The `aes(x = regionname)` maps the variable to the x-axis
+- `labs()` is used to add informative axis labels and a title
+- Interpretation connects visual patterns to business context (e.g. supply, market activity)
 
 
 💬 **Suggested In-Class Prompts** (if needed)
 
-List as needed
+NA
 
 📌 **Common Misunderstandings**
 
-List as needed
+- Confusing `geom_bar()` (which counts observations) with `geom_col()` (which uses values)
+- Using the wrong variable in `aes(x = ...)` — e.g. numeric instead of categorical
+- Assuming more listings = better opportunities, without thinking about demand
+- Misinterpreting the y-axis — it's count of rows, not price or square meters
 
 :::
 
@@ -105,11 +115,59 @@ Solution
 
 ::: {.solution-block-body}
 
-Here’s the explanation and code:
+**(a). Why is this information valuable to real estate investors or city planners?**
+
+Knowing the number of listings by region helps real estate investors identify which areas have a large housing supply, suggesting more opportunities to buy or sell. For city planners, it gives insight into regional activity and potential infrastructure or zoning needs. For example:
+
+- A region with many listings might signal high development or turnover.
+- A region with few listings might suggest limited availability or less desirability, or that it is mostly owner-occupied.
+- Investors may use this to target areas with more competition (supply) or fewer listings (scarcity).
+- City planners might use it to anticipate demand for transport, utilities, or amenities.
+
+NOTE: this is not the only correct answer to this question.
+
+**(b). Starter code with correct variable name**
+
+The variable we want on the x-axis is regionname. Here's the updated code:
 
 ```{r}
-print("Hello, world!")
+ggplot(housing, 
+       aes(x = regionname)
+       ) +
+    geom_bar()
 ```
+
+**(c). Extended version with labels and rotated axis text**
+
+```{r}
+ggplot(housing, 
+       aes(x = regionname)
+       ) +
+    geom_bar() +
+    labs(
+        x = "Region", 
+        y = "Number of Listings", 
+        title = "Number of Listings by Region"
+    ) +
+    theme(
+        axis.text.x = element_text(angle = 25, hjust = 1)
+    )
+```
+
+**(d)**
+
+From the plot, we can see several clear patterns:
+
+- Northern Metro and Southern Metro have the highest number of listings
+- South-East Metro has the fewest listings
+- Western Metro is also highly active, with nearly as many listings as the Northern and Southern regions.
+Eastern Metro has moderate activity.
+
+(possible) Interpretation:
+
+- The uneven distribution of listings suggests that some regions (e.g., South-East Metro) may have limited housing supply, while others (e.g., Northern and Southern Metro) are more active markets.
+- This can affect pricing dynamics — high-supply regions may offer more choice and competition, while low-supply areas could see rising prices due to scarcity.
+
 :::
 
 :::
