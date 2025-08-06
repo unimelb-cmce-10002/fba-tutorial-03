@@ -101,6 +101,8 @@ region_bar <-
     axis.text.x = element_text(angle = 25, hjust = 1),  # Rotate x labels
     plot.title = element_text(hjust = 0.5)              # Center the title
   )
+
+region_bar
 ```
 
 

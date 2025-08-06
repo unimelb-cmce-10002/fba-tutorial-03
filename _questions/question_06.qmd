@@ -1,5 +1,5 @@
 <!-- question-type: inclass -->
-### Exercise 1: Title
+### Exercise 6: Improving the Price-Distance Relationship Plot
 
 **(a).** Together with your peers, propose three changes you want to make to the plot in Exercise 3. Discuss the rationale behind each change and how it might improve the visualization.
 
@@ -21,21 +21,35 @@ Teaching Note
 🎯 **Learning Objective** 
 Students should:
 
-- XXXXX
+- Interpret a nonlinear trend (polynomial regression) to better describe curved relationships in data
+- Learn to modify `geom_smooth()` to fit more flexible models
 
 ✅   **Core Concepts to Highlight**
 
-List them here
-
+- Filtering by dwelling type (e.g., type == "House") narrows the focus and makes patterns easier to interpret
+- Switching from a linear fit to a nonlinear polynomial fit lets the trend line bend, better matching the shape of the data
+    - Specifically, formula = y ~ poly(x, 2) fits a curved line — not just a straight diagonal
+    - You can explain this to students as: “We’re asking R to draw a line that gently curves to follow the pattern, not just drop in a straight line. It’s like letting the line have one bend — often that’s enough to tell a more realistic story.”
+    - They don’t need to understand the math behind the polynomial — focus on the intuition: it captures more nuance than a straight line
+    - If you feel comfortable doing so, link back to a quadatric function -- which is what this is
+- Using consistent, accessible colors (e.g., from okabe_ito()) ensures better readability and equity. and we pick the color from the faceted histo to match!
 
 💬 **Suggested In-Class Prompts** (if needed)
 
-List as needed
+“Why does focusing only on Houses help here?”
+
+“What do we gain by switching to a nonlinear fit?”
+
+“Does the curvature match what you expected about price and distance?”
+
+“What would happen if we showed all dwelling types together — or compared them separately?” 
 
 📌 **Common Misunderstandings**
 
-List as needed
-
+- Believing that polynomial fits overfit or are “cheating” — clarify that they're simply more flexible models
+- Forgetting to filter before plotting, which leads to noisy, multi-type data making the trend unclear
+- Not understanding `poly(x, 2)` — remind students they don’t need to write polynomial code themselves yet, just understand the shape
+- Confusing aesthetic improvements (e.g., color, centered title) with analytical ones — both matter, but for different reasons
 :::
 
 :::
@@ -54,11 +68,39 @@ Solution
 
 ::: {.solution-block-body}
 
-Here’s the explanation and code:
 
 ```{r}
-print("Hello, world!")
+# Improved scatterplot: price vs. distance for Houses only, with nonlinear trend
+scttr <-
+  housing %>%
+  filter(type == "House") %>%
+  ggplot(aes(x = distance, y = price)) +
+  # Scatter plot with reduced alpha to handle overplotting
+  geom_point(alpha = 0.05, color = palette_okabe_ito()[2]) +
+  # Polynomial fit to capture curvature (not just a straight line)
+  geom_smooth(
+    method = "lm",
+    formula = y ~ poly(x, 2),   # Allow one bend in the trend line
+    se = FALSE,
+    color = palette_okabe_ito()[6],
+    linewidth = 1
+  ) +
+  # Format y-axis as dollars
+  scale_y_continuous(labels = scales::dollar) +
+  # Add labels and center the title
+  labs(
+    x = "Distance to CBD (km)",
+    y = "Price",
+    title = "House Price vs. Distance"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+
+scttr
 ```
+
+
 :::
 
 :::

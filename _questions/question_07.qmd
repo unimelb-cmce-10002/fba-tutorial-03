@@ -32,20 +32,38 @@ Teaching Note
 🎯 **Learning Objective** 
 Students should:
 
-- XXXXX
+- Learn how to combine multiple ggplots into a single visual layout using `{patchwork}`
+- Understand the basics of layout operators: `/` for rows, `|` for columns
+- Practice naming plots as R objects, encouraging modular and readable code
+- Use `ggsave()` to export a polished visualization for sharing or reporting
 
 ✅   **Core Concepts to Highlight**
 
+- The {patchwork} package (built into recent versions of ggplot2) uses simple symbols:
+    - `/` stacks plots vertically
+    - `|` places plots side-by-side
+- `plot_layout(guides = "collect")` helps align legends across the full layout
+- & `theme(...)` applies a consistent theme tweak to all plots in the layout
+- `ggsave()` exports a plot to file — emphasize file name and dimensions are key
 List them here
 
 
 💬 **Suggested In-Class Prompts** (if needed)
 
+“Why might you want to combine multiple plots into one?”
+
+“What’s the difference between / and | in `{patchwork}`?”
+
+“How would this be used in a business setting — e.g., for a report or dashboard?”
+
+“What’s something you’d still want to tweak before sharing this with a wider audience?”
 List as needed
 
 📌 **Common Misunderstandings**
 
-List as needed
+- Confusing plot_layout() with a plotting function — clarify it's part of the combination chain
+- Overwriting plots accidentally or misnaming them in the final composition
+- Saving with a file extension other than .pdf without adjusting output type
 
 :::
 
@@ -65,11 +83,17 @@ Solution
 
 ::: {.solution-block-body}
 
-Here’s the explanation and code:
-
 ```{r}
-print("Hello, world!")
+# Combine them into one layout
+combined_plot <- histogrm / (region_var | scttr) + 
+  plot_layout(guides = "collect") & 
+  theme(legend.position = "bottom")
+
+# Save the combined plot
+ggsave("combined_price_plots.pdf", plot = combined_plot, width = 12, height = 8)
 ```
+
+
 :::
 
 :::

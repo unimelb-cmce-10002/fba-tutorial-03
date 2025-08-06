@@ -21,20 +21,41 @@ Teaching Note
 🎯 **Learning Objective** 
 Students should:
 
-- XXXXX
+- Refine a histogram-based visualization to better communicate distributional differences
+- Understand why log scales are helpful for skewed price data
+- Recognize and apply proportional y-axis scaling in faceted plots
+- Incorporate accessibility-aware color palettes
 
 ✅   **Core Concepts to Highlight**
 
-List them here
+NOTE: Make this line of code available to students and explain what it means -- remind them they dont need to know it themselves ("We’re introducing more complex ggplot tools here — don’t stress about the syntax yet, focus on what the chart shows and how small changes help us tell a clearer story.")
 
+```r
+aes(y = after_stat(count) / 
+     tapply(after_stat(count), after_stat(PANEL), sum)[after_stat(PANEL)])
+```
+- Skewed distributions like housing prices often benefit from a log-transformed x-axis to reveal patterns in lower price brackets
+- Proportions, rather than raw counts, are helpful when comparing multiple groups (facets), especially if group sizes differ
+- after_stat(count) / ... computes within-facet proportions — we won’t unpack the full syntax yet, but students should understand the concept:  “We’re dividing each bar height by the total number of listings for that dwelling type, so the height shows the share of that type’s listings in each price range.”
+- Color palettes like `scale_fill_okabe_ito()` ensure plots are clear for all readers — including those with color vision deficiencies
 
 💬 **Suggested In-Class Prompts** (if needed)
 
+“What does using a log x-axis reveal that the original plot might hide?”
+
+“How does changing to proportions shift the way we interpret the differences across dwelling types?”
+
+“Why might counts be misleading when the number of houses and apartments differ?”
+
+“What would happen if we removed faceting and used color alone to distinguish types?”
 List as needed
 
 📌 **Common Misunderstandings**
 
-List as needed
+- Students may believe log scales change the data, not just the display
+- Assuming y-axis values are still raw counts when they’ve become proportions — emphasize interpretation
+- Confusing the technical implementation of `after_stat(...)` with something they are expected to write themselves — reassure them it’s a premade component for now
+- Thinking accessibility features like color palettes are optional or cosmetic — emphasize their importance for real-world communication
 
 :::
 
@@ -54,10 +75,44 @@ Solution
 
 ::: {.solution-block-body}
 
-Here’s the explanation and code:
-
 ```{r}
-print("Hello, world!")
+# Improved histogram of price by dwelling type
+histgrm <- 
+    housing %>%
+    ggplot(aes(x = price, fill = type)) +
+  # Show proportions instead of raw counts (within each facet)
+  geom_histogram(
+    aes(y = after_stat(count) / 
+             tapply(after_stat(count), after_stat(PANEL), sum)[after_stat(PANEL)]),
+    bins = 50
+  ) +
+  # Log-scale the x-axis to handle price skew
+  scale_x_continuous(
+    trans = "log10",
+    labels = scales::dollar
+  ) +
+  # Format y-axis as percentages
+  scale_y_continuous(
+    labels = scales::label_percent()
+  ) +
+  # Add labels and title
+  labs(
+    x = "Price", 
+    y = "Share of Listings", 
+    title = "Prices by Dwelling Type"
+  ) +
+  # Create separate plots for each dwelling type
+  facet_wrap(~type) +
+  # Rotate x-axis labels for readability
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  # Use colorblind-friendly fill palette
+  scale_fill_okabe_ito() +
+  # Center the title
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+
+histogrm
 ```
 :::
 
