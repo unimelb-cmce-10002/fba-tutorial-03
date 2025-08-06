@@ -1,3 +1,151 @@
 ## The Business Challenge
 
-Explain the Business Challenge and set up in this file
+```{r}
+#| warning: false
+#| echo: false
+library(tidyverse)  # for plotting, includes ggplot
+library(patchwork)  # for combining multiple plots into subfigures
+library(scales)     # for formatting axis scales
+library(ggokabeito) # color blind friendly color palette -- this course's default
+library(ggthemes)   # some extra styling & themes to explore
+```
+
+```{r}
+#| warning: false
+#| eval: true
+#| echo: false
+#| cache: true
+
+# Create data/ directory if it doesn't exist
+if (!dir.exists("data")) {
+  dir.create("data")
+}
+# Define URL and destination file path
+url <- "https://github.com/unimelb-cmce-10002/fba-book/raw/refs/heads/main/data/melbourne_housing.csv"
+destfile <- "data/melbourne_housing.csv"
+# Download the file if it doesn't already exist
+if (!file.exists(destfile)) {
+  download.file(url, destfile, mode = "wb")
+}
+# Load the data
+housing <- read_csv(destfile)
+```
+
+### The Topic: Understanding Melbourne’s Housing Market {.unnumbered}
+
+Melbourne’s real estate market is one of the most dynamic in Australia. Property prices are influenced by several factors, including location, dwelling type, and proximity to the Central Business District (CBD). Buyers, sellers, and policymakers constantly analyze housing trends to make informed decisions. Understanding these trends is crucial in a $2 trillion+ housing market, where even small fluctuations in pricing expectations can have significant financial impacts.
+
+A key question we will explore is: How do property prices vary by region, dwelling type, and location? By analyzing real estate data, we can identify patterns that help explain the drivers of Melbourne’s housing prices and their implications for different stakeholders in the market.
+
+### The Data: The Melbourne Housing Market Dataset {.unnumbered}
+
+We will use a dataset containing real estate sales data from Melbourne. The dataset provides insights into housing trends and includes key variables that influence property prices.
+
+The dataset captures the property location within broader metropolitan regions (regionname), allowing us to compare trends across different areas. It also includes the type of dwelling, classified as House (h), Townhouse (t), or Apartment (u), enabling us to assess price differences based on housing type. The sale price (price) provides a measure of market value, while the distance to the CBD (distance) helps analyze the impact of proximity to the city center on property prices.
+
+Similar datasets are widely used by real estate analysts, banks, and property investors to assess housing trends, predict future movements, and guide investment decisions. Through this tutorial, we’ll work with real-world data to uncover patterns and develop a deeper understanding of Melbourne’s property market. Let's dive in!
+
+### Where we're headed {.unnumbered}
+
+Just a few lines of R code transform numbers to data visualizations.
+
+From this:
+
+```{r}
+#| echo: false 
+housing %>%
+    select(type, address, postcode, price, distance, regionname) %>%
+    head(10)
+```
+
+to this (REMARK Still need to complete the pretty-ing of plots)
+
+```{r}
+#| fig-width: 7
+#| fig-height: 7
+#| fig-align: "center"
+#| echo: false
+
+## FINAL Histogram
+price_hist <-
+    housing %>%
+    ggplot(aes(x = price, fill = type)) +
+    # ggplot(aes(x=price, group = type, fill = type)) +
+    geom_histogram(aes(y = after_stat(count) / tapply(after_stat(count), after_stat(PANEL), sum)[after_stat(PANEL)]),
+                   bins = 50) +
+    # Natural log scale for x-axis with meaningful breaks
+    scale_x_continuous(
+        trans = "log",
+        labels = scales::dollar,
+        breaks = c(150e3, 500e3, 1e6, 2.5e6, 6e6)#,
+        #labels = scales::comma
+    ) +
+    scale_y_continuous(labels = scales::percent) +
+    labs(x = "Price", y = "Proportion within Type", title = "Prices by Dwelling Type") + 
+    facet_wrap(~type) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    scale_fill_okabe_ito() +
+    theme_classic() + 
+    theme(
+        plot.title = element_text(hjust = 0.5)  # Center title
+    ) #+
+    #theme_economist()
+
+price_dist <-
+    housing %>%
+    filter(type == "House") %>%
+    ggplot(aes(x = distance, y = price)) +
+    geom_point(alpha = 0.05, , color = palette_okabe_ito()[2]) +
+    geom_smooth(method = "lm", formula = y ~ poly(x,2), se = FALSE, color = palette_okabe_ito()[6], linewidth = 1) +
+    scale_y_continuous(labels = scales::dollar) +
+    labs(x = "Distance to CBD", y = "Price", title = "House Price vs. Distance") +
+    scale_color_okabe_ito() +
+    theme(
+        plot.title = element_text(hjust = 0.5)  # Center title
+    ) 
+
+# region update only houses
+region_bar <- 
+    housing %>%
+    filter(type == "House") %>%
+    ggplot(aes(x = fct_infreq(regionname))) +
+    geom_bar(aes(y = after_stat(count) / sum(after_stat(count))), fill = palette_okabe_ito()[2]) +
+    labs(x = "Region", y = "Frequency", title = "Number of Listings by Region") +
+    #theme_minimal() +
+    theme(
+        axis.text.x = element_text(angle = 25, hjust = 1),
+        plot.title = element_text(hjust = 0.5)  # Center title
+    ) 
+
+# Bringing together 
+price_hist /    (region_bar | price_dist) + 
+    plot_layout(guides = "collect") & 
+    theme(legend.position = "bottom")
+
+```
+
+## Loading the Data
+
+### R packages for today {.unnumbered}
+
+```{r}
+#| eval: false
+library(tidyverse)  # for plotting, includes ggplot
+library(patchwork)  # for combining multiple plots into subfigures
+library(scales)     # for formatting axis scales
+library(ggokabeito) # color blind friendly color palette -- this course's default
+library(ggthemes)   # some extra styling & themes to explore
+```
+
+### Loading the Data in R {.unnumbered}
+
+```{r}
+#| warning: false
+#| eval: false
+#| echo: true
+#| label: load-housing-data
+#| cache: true
+
+housing <-
+    read_csv("data/melbourne_housing.csv")
+```

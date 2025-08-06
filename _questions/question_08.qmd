@@ -1,12 +1,11 @@
 <!-- question-type: inclass -->
-### Exercise 8: Title
+### Exercise 8: Synthesizing the Findings
 
-This is the text for the question, with its accompanying code 
+If you were presenting these results in a business meeting, how would you explain the key takeaways? Structure your summary to include:
 
-```{r}
-# Example code for the question
-1 + 1
-```
+* What you analyzed (data, variables)
+* What you found (key insights from the visualizations)
+* What decisions could be made based on this information?
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
 ::: {.content-visible when-profile="r-teaching-guide"}

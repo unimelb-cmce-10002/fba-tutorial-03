@@ -1,11 +1,21 @@
 <!-- question-type: inclass -->
-### Exercise 7: Title
+### Exercise 7: Putting the plots together
 
-This is the text for the question, with its accompanying code 
+**(a).** Use the code below to combine the plots for the three exercises above. Replace `PLOT_ONE`, `PLOT_TWO`, and `PLOT_THREE` with the plots you created in Exercises 5, 6, and 7.
 
 ```{r}
-# Example code for the question
-1 + 1
+#| eval: false
+PLOT_ONE /    
+    (PLOT_TWO | PLOT_THREE) + 
+    plot_layout(guides = "collect") & 
+    theme(legend.position = "bottom")
+```
+
+**(b).** Save this combined plot as a PDF file using the `ggsave()` function. You can specify the file name and dimensions using the `filename` and `width` and `height` arguments.
+
+```{r}
+#| eval: false
+ggsave("YOUR_FILE_NAME", width = 12, height = 8)
 ```
 
 <!-- BEGIN PROFILE:r-teaching-guide -->

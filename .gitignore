@@ -6,3 +6,10 @@
 .Rproj.user
 
 /.quarto/
+
+*cache*
+*files*
+
+*student.qmd
+
+data/*

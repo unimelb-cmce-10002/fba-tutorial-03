@@ -1,12 +1,11 @@
-<!-- question-type: prepare -->
-### Exercise 4: Title
+<!-- question-type: inclass -->
+### Exercise 4: Improving the Listings by Region Plot
 
-This is the text for the question, with its accompanying code 
+**(a).** Together with your peers, propose three changes you want to make to the plot in Exercise 1. Discuss the rationale behind each change and how it might improve the visualization.
 
-```{r}
-# Example code for the question
-1 + 1
-```
+**(b).** Work with your tutor to create an agreed upon list of changes to make to the plot. What steps do you need to take to make these improvements?
+
+**(c).** Implement the changes suggested in the R.
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
 ::: {.content-visible when-profile="r-teaching-guide"}

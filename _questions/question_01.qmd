@@ -1,12 +1,62 @@
 <!-- question-type: prepare -->
-### Exercise 1: Title
+### Exercise 1: Plotting Number of Listings by Region
 
-This is the text for the question, with its accompanying code 
+By the end of this exercise, your plot should look similar to this one:
 
 ```{r}
-# Example code for the question
-1 + 1
+#| fig-width: 5
+#| fig-height: 5
+#| fig-align: "center"
+#| echo: false
+
+ggplot(housing, 
+       aes(x = regionname)
+       ) +
+    geom_bar() +
+    labs(x = "Region", 
+         y = "Frequency", 
+         title = "Number of Listings by Region"
+         ) +
+    theme(
+        axis.text.x = element_text(angle = 25, hjust = 1),
+    )
 ```
+
+
+**(a).** If you were a real estate investor or city planner, why would knowing the number of listings by region be valuable? What decisions could be influenced by this visualization?
+
+**(b).** Use the starter code below to create a first version of the bar plot. Replace `YOUR_VARIABLE_NAME` with the appropriate variable name from the dataset.
+
+:::{.callout-tip title="What is a Bar Plot?" collapse = "true"}
+A **bar plot** is a graphical representation of categorical data, where each category is represented by a bar whose height reflects its frequency or proportion. It is commonly used to compare counts across different groups, making it easy to identify the most and least common categories in a dataset. In business and research, bar plots help visualize trends, distributions, and key differences in data at a glance.
+:::
+
+```{r}
+#| eval: false
+ggplot(housing, 
+       aes(x = YOUR_VARIABLE_NAME)
+       ) +
+    geom_bar()
+```
+
+**(c).** Extend the plot above by adding labels to the x-axis, y-axis, and title. Use the `labs()` function to add these labels. The code below also rotates the axis labels by 25 degrees to improve readability.
+
+```{r}
+#| eval: false
+ggplot(housing, 
+       aes(x = YOUR_VARIABLE_NAME)
+       ) +
+    geom_bar() +
+    labs(x = "YOUR_X_AXIS_LABEL", 
+         y = "YOUR_Y_AXIS_LABEL", 
+         title = "YOUR_TITLE"
+         ) +
+    theme(
+        axis.text.x = element_text(angle = 25, hjust = 1),
+    )
+```
+
+**(d).** What patterns do you notice in the number of listings? Are certain regions overrepresented or underrepresented? How might this affect housing supply and pricing? 
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
 ::: {.content-visible when-profile="r-teaching-guide"}
