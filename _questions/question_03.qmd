@@ -95,20 +95,39 @@ Teaching Note
 🎯 **Learning Objective** 
 Students should:
 
-- XXXXX
+- Create scatter plots to visualize the relationship between two continuous variables
+- Use transparency (alpha) to manage overplotting in large datasets
+- Add and interpret linear trend lines using geom_smooth(method = "lm")
+- Format numeric axes appropriately for financial data
+- Begin interpreting direction, strength, and limitations of observed relationships in data
+
 
 ✅   **Core Concepts to Highlight**
 
-List them here
-
+- Scatter plots are best for showing relationships between two numeric variables
+- Overplotting can obscure patterns — using alpha makes dense regions clearer
+- `geom_smooth(method = "lm")` fits a linear regression line; se = FALSE hides the shaded confidence interval
+- `scale_y_continuous(labels = scales::dollar)` improves interpretability for financial values
+- The slope of the trend line shows direction of relationship; scatter around the line shows noise or variation
+- The presence of outliers and spread highlights the limits of simple models and invites discussion of omitted variables
 
 💬 **Suggested In-Class Prompts** (if needed)
 
-List as needed
+“What are some reasons that a distant home might still have a high price?”
+
+“What are we missing if we just look at this linear trend?”
+
+“Could this relationship be non-linear? How would you test that?”
+
+“What variables might improve our understanding if added to the model?”
 
 📌 **Common Misunderstandings**
 
-List as needed
+- Assuming the linear line implies causality — clarify it’s descriptive, not causal
+- Not understanding what geom_smooth(method = "lm") does — thinking it's a smoothing curve by default
+- Misinterpreting the spread as measurement error rather than unobserved heterogeneity
+- Thinking the relationship is strong just because the trend line is visible — encourage students to consider variance and outliers
+
 
 :::
 
@@ -128,11 +147,81 @@ Solution
 
 ::: {.solution-block-body}
 
-Here’s the explanation and code:
+**(a). Why might we expect a relationship between price and distance to the CBD?**
+
+In most cities, being closer to the Central Business District (CBD) is associated with higher property prices due to:
+
+- Better access to jobs, transport, and amenities
+- Scarcity of land and high demand in central locations
+- Prestige or desirability of inner-city living
+
+As distance from the CBD increases, we often expect prices to fall — although this relationship may not be perfectly linear due to other factors like transport links, school zones, or regional variation.
+
+**(b)**
 
 ```{r}
-print("Hello, world!")
+ggplot(housing, 
+       aes(x = distance, y = price)
+       ) +
+    geom_point()
 ```
+
+**(c)**
+
+```{r}
+ggplot(housing, 
+       aes(x = distance, y = price)
+       ) +
+    geom_point(alpha = 0.05)
+```
+
+Notes:
+
+- alpha = 0.1: Points are semi-transparent — overlap is reduced but still busy.
+- alpha = 0.05: Good balance — dense regions become visibly darker.
+- alpha = 0.01: Almost all points are extremely faint; hard to see sparsely populated areas.
+
+Lower alpha values reduce overplotting and help reveal density of data in crowded areas.
+
+**(d)** 
+
+```{r}
+ggplot(housing, 
+       aes(x = distance, y = price)
+       ) +
+    geom_point(alpha = 0.05) +
+    geom_smooth(method = "lm", se = FALSE)
+```
+
+This adds a linear regression line, helping us see the overall trend in how price changes with distance.
+
+**(e)**
+
+```{r}
+ggplot(housing, 
+       aes(x = distance, y = price)
+       ) +
+    geom_point(alpha = 0.05) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 1) +
+    scale_y_continuous(labels = scales::dollar) +
+    labs(
+        x = "Distance to CBD (km)", 
+        y = "Price", 
+        title = "House Price vs. Distance"
+    )
+```
+
+
+**(f)**
+(f). What does the scatter plot reveal?
+The scatter plot shows a negative relationship between distance from the CBD and house price:
+
+- As distance increases, price tends to decrease
+- This is visible in the downward slope of the linear trend line
+- There’s also substantial variation in prices at all distances — distance is a strong predictor, but not the only factor
+- The line helps summarize the average trend, even in the presence of noisy data
+- This supports the idea that proximity to the CBD carries a price premium, though other drivers of housing value are clearly at play
+
 :::
 
 :::
