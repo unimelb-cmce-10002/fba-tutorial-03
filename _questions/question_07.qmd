@@ -85,7 +85,7 @@ Solution
 
 ```{r}
 # Combine them into one layout
-combined_plot <- histogrm / (region_var | scttr) + 
+combined_plot <- price_hist / (region_bar | scttr) + 
   plot_layout(guides = "collect") & 
   theme(legend.position = "bottom")
 
