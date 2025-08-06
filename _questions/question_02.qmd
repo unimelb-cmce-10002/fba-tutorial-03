@@ -118,20 +118,29 @@ Teaching Note
 🎯 **Learning Objective** 
 Students should:
 
-- XXXXX
+- Understand how histograms visualize the distribution of continuous variables
+- Practice using `aes()` to map additional aesthetic dimensions like fill
+- Use `facet_wrap()` to generate subplots for categorical comparisons
+- Interpret distributional shape (e.g. skewness, modality) and relate it to real-world business insights
 
 ✅   **Core Concepts to Highlight**
 
-List them here
-
+- A histogram is for continuous data; bar plots are for categorical data
+- `geom_histogram()` counts how many values fall into each bin
+- `fill = type` adds color by category, while `facet_wrap(~ type)` breaks plots into small multiples
+- `scale_x_continuous(labels = scales::dollar)` improves readability of financial data
+- Distribution shape tells us about central tendency, spread, and skewness, all of which matter for pricing and segmentation
 
 💬 **Suggested In-Class Prompts** (if needed)
 
-List as needed
+NA
 
 📌 **Common Misunderstandings**
 
-List as needed
+- Confusing bar plots with histograms (especially when faceted or filled)
+- Thinking `fill = type` adds numerical grouping, not realizing it’s visual only unless grouped/faceted
+- Histograms in R can combine two variables in faceted plots: `x = numeric`, `facet = categorical`
+- Interpreting y-axis height as absolute frequency in faceted histograms (it's within-facet density)
 
 :::
 
@@ -151,11 +160,86 @@ Solution
 
 ::: {.solution-block-body}
 
-Here’s the explanation and code:
+**(a) Why is a histogram useful here?**
+
+A histogram is useful for understanding the distribution of prices across properties. It shows how prices are spread out, where most of the listings fall, and whether there are outliers or skewed distributions.
+
+- By plotting prices separately for each dwelling type, we can:
+- Compare typical price ranges across types (e.g., Units vs. Houses).
+- Spot differences in distribution shape (e.g., skewness, bimodality).
+- Better understand market segmentation: do certain types dominate in certain price brackets?
+
+**(b)**
 
 ```{r}
-print("Hello, world!")
+ggplot(housing, 
+       aes(x = price)
+       ) +
+    geom_histogram(bins = 50)
 ```
+
+**(c)** 
+
+```{r}
+ggplot(housing, 
+       aes(x = price)
+       ) +
+    geom_histogram(bins = 50) +
+    labs(
+        x = "Price", 
+        y = "Number of Listings", 
+        title = "Distribution of House Prices"
+    )
+```
+
+**(d)**
+```{r}
+ggplot(housing, 
+       aes(x = price)
+       ) +
+    geom_histogram(bins = 50) +
+    scale_x_continuous(labels = scales::dollar) +
+    labs(
+        x = "Price", 
+        y = "Number of Listings", 
+        title = "Distribution of House Prices"
+    ) +
+    theme(
+        axis.text.x = element_text(angle = 55, hjust = 1)
+    )
+```
+
+```{r}
+ggplot(housing, 
+       aes(x = price, fill = type)
+       ) +
+    geom_histogram(bins = 50) +
+    scale_x_continuous(labels = scales::dollar) +
+    labs(
+        x = "Price", 
+        y = "Density within Type", 
+        title = "Prices by Dwelling Type"
+    ) +
+    theme(
+        axis.text.x = element_text(angle = 55, hjust = 1)
+    ) +
+    facet_wrap(~ type)
+```
+
+**(f)**
+
+The histogram reveals clear differences in price distributions across dwelling types:
+
+- Apartments have the lowest prices, with most listings clustered below $1 million. The distribution is strongly right-skewed, indicating that while most apartments are affordable, a few are much more expensive.
+- Houses span a much wider price range and dominate the middle of the market. Most listings fall between $500,000 and $1.5 million, but the distribution again shows right skew, with a notable number of high-end listings exceeding $2 million.
+- Townhouses are tightly concentrated around $750,000 to $1.25 million, with fewer extreme values. Their distribution is narrower and more symmetric compared to the other two dwelling types.
+
+Key takeaways:
+
+- Houses are the most numerous and show the greatest variation in price.
+- Apartments tend to be lower-priced, making them more accessible to entry-level buyers or investors.
+- Townhouses occupy a mid-range niche, potentially appealing to buyers seeking a balance between space and affordability.
+
 :::
 
 :::
