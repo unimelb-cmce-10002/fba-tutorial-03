@@ -4,5 +4,5 @@ project:
 title: 'Teaching Guide: Data Visualization for Business Analytics'
 format:
   html:
-    output-file: "tutorial-03-r-teaching-guide"
+    output-file: "tutorial-03-teaching-guide"
     output-ext:  "html"

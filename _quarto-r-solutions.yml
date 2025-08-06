@@ -4,5 +4,5 @@ project:
 title: 'Solutions document: Data Visualization for Business Analytics'
 format:
   html:
-    output-file: "tutorial-03-r-solutions"
+    output-file: "tutorial-03-solutions"
     output-ext:  "html"
