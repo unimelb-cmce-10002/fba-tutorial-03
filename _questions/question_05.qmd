@@ -78,7 +78,7 @@ Solution
 ```{r}
 # Improved histogram of price by dwelling type
 price_hist <- 
-    housing %>%
+    housing |>
     ggplot(aes(x = price, fill = type)) +
   # Show proportions instead of raw counts (within each facet)
   geom_histogram(

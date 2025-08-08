@@ -27,9 +27,9 @@ Students should:
 
 ✅   **Core Concepts to Highlight**
 
-- Piping (`%>%`) allows students to chain together multiple steps in a clear, readable sequence
+- Piping (`|>`) allows students to chain together multiple steps in a clear, readable sequence
     - This is their first exposure — emphasize that it’s used to “pass” the result of one step into the next
-    - Example: `housing %>% filter(...) %>% ggplot(...)` reads as a logical sequence of actions
+    - Example: `housing |> filter(...) |> ggplot(...)` reads as a logical sequence of actions
 - Filtering by dwelling type (e.g., "House") sharpens the message by reducing noise and focusing on a meaningful subset
 - Reordering bars using fct_infreq() displays categories from most to least common, making comparisons intuitive
 - Proportions on the y-axis improve interpretability, especially when raw counts vary in scale — but require extra care to calculate within geom_bar()
@@ -77,9 +77,9 @@ Solution
 ```{r}
 # Solution: Focus on Houses, use proportions, order bars, and center title
 region_bar <- 
-  housing %>%
+  housing |>
   # 1. Filter to only include "House" listings
-  filter(type == "House") %>%
+  filter(type == "House") |>
   # 2. Create the plot
   ggplot(
     # 2a. Reorder the region names based on frequency

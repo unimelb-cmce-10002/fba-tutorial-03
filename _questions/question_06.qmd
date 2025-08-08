@@ -72,8 +72,8 @@ Solution
 ```{r}
 # Improved scatterplot: price vs. distance for Houses only, with nonlinear trend
 scttr <-
-  housing %>%
-  filter(type == "House") %>%
+  housing |>
+  filter(type == "House") |>
   ggplot(aes(x = distance, y = price)) +
   # Scatter plot with reduced alpha to handle overplotting
   geom_point(alpha = 0.05, color = palette_okabe_ito()[2]) +

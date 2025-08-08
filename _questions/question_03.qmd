@@ -19,7 +19,7 @@ ggplot(housing,
     scale_y_continuous(labels = scales::dollar) +
     labs(x = "Distance to CBD (km)", 
          y = "Price", 
-         title = "House Price vs. Distance"
+         title = "Dwelling Price vs. Distance"
          )
 ```
 **(a).** Why might we expect a relationship between price and distance to the CBD?

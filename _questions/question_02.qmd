@@ -9,7 +9,7 @@ By the end of this exercise, your plot should look similar to this one:
 #| fig-align: "center"
 #| echo: false
 
-housing %>%
+housing |>
     ggplot(aes(x = price, 
                fill = type)
            ) +
@@ -188,7 +188,7 @@ ggplot(housing,
     labs(
         x = "Price", 
         y = "Number of Listings", 
-        title = "Distribution of House Prices"
+        title = "Distribution of Dwelling Prices"
     )
 ```
 
@@ -202,7 +202,7 @@ ggplot(housing,
     labs(
         x = "Price", 
         y = "Number of Listings", 
-        title = "Distribution of House Prices"
+        title = "Distribution of Dwelling Prices"
     ) +
     theme(
         axis.text.x = element_text(angle = 55, hjust = 1)
